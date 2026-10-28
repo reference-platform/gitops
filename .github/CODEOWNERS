@@ -1,0 +1,6 @@
+/envs/*/platform/ @Swif2er
+/envs/*/apps/ @Swif2er
+
+# With teams, platform files belong to the platform team and apps to the dev teams:
+# /envs/*/platform/  @reference-platform/platform
+# /envs/*/apps/      @reference-platform/dev
