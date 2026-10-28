@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: platform
+  namespace: argocd
+spec:
+  description: Infra components. Owned by the platform team.
+  sourceRepos:
+    - '*'
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: '*'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: apps
+  namespace: argocd
+spec:
+  description: Workloads. Owned by the dev teams.
+  sourceRepos:
+    - https://github.com/reference-platform/gitops.git
+    - ghcr.io/reference-platform/charts
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: apps
