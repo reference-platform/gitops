@@ -50,25 +50,56 @@ spec:
         repoURL: https://github.com/reference-platform/gitops.git
         revision: main
         files:
-          - path: envs/dev/apps/*/config.yaml
+          - path: envs/dev/apps/*/*/values.yaml
   template:
     metadata:
-      name: '{{ index .path.segments 1 }}-{{ .path.basename }}'
+      name: '{{ index .path.segments 1 }}-{{ index .path.segments 3 }}-{{ .path.basename }}'
     spec:
       project: apps
-      sources:
-        - repoURL: '{{ .chart.repo }}'
-          chart: '{{ .chart.name }}'
-          targetRevision: '{{ .chart.version }}'
-          helm:
-            valueFiles:
-              - $values/{{ .path.path }}/values.yaml
-        - repoURL: https://github.com/reference-platform/gitops.git
-          targetRevision: main
-          ref: values
+      source:
+        repoURL: https://github.com/reference-platform/gitops.git
+        targetRevision: main
+        path: charts/service
+        helm:
+          releaseName: '{{ index .path.segments 3 }}-{{ .path.basename }}'
+          valueFiles:
+            - ../../{{ .path.path }}/values.yaml
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{ .namespace }}'
+        namespace: apps
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: databases
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: https://github.com/reference-platform/gitops.git
+        revision: main
+        directories:
+          - path: envs/dev/apps/*/postgres
+  template:
+    metadata:
+      name: '{{ index .path.segments 1 }}-{{ index .path.segments 3 }}-{{ .path.basename }}'
+    spec:
+      project: apps
+      source:
+        repoURL: https://github.com/reference-platform/gitops.git
+        targetRevision: main
+        path: '{{ .path.path }}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: apps
       syncPolicy:
         automated:
           prune: true
