@@ -71,13 +71,11 @@ spec:
         automated:
           prune: true
           selfHeal: true
-        syncOptions:
-          - CreateNamespace=true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: databases
+  name: manifests
   namespace: argocd
 spec:
   goTemplate: true
@@ -87,7 +85,7 @@ spec:
         repoURL: https://github.com/reference-platform/gitops.git
         revision: main
         directories:
-          - path: envs/dev/apps/*/postgres
+          - path: envs/dev/apps/*/manifests
   template:
     metadata:
       name: '{{ index .path.segments 1 }}-{{ index .path.segments 3 }}-{{ .path.basename }}'
@@ -102,7 +100,5 @@ spec:
         namespace: apps
       syncPolicy:
         automated:
-          prune: true
+          prune: false
           selfHeal: true
-        syncOptions:
-          - CreateNamespace=true

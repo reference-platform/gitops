@@ -36,4 +36,4 @@ jobs:
       - name: Validate the plain manifests
         run: >
           docker run --rm --volume "$PWD:/work" --workdir /work "$KUBECONFORM"
-          -strict -summary -kubernetes-version "$KUBERNETES_VERSION" envs/*/apps/*/postgres
+          -strict -summary -kubernetes-version "$KUBERNETES_VERSION" envs/*/apps/*/manifests
