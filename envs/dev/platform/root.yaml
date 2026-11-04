@@ -12,7 +12,7 @@ spec:
     targetRevision: main
     path: envs/dev/platform
     directory:
-      include: '{projects,appsets}.yaml'
+      include: '{projects,namespaces,appsets}.yaml'
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
