@@ -1,0 +1,39 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    env:
+      KUBECONFORM: ghcr.io/yannh/kubeconform:v0.8.0
+      KUBERNETES_VERSION: 1.37.0
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v7.0.1
+      - name: Set up Helm
+        uses: azure/setup-helm@v5.0.1
+        with:
+          version: v4.3.1
+      - name: Lint and render the charts
+        run: |
+          for values in envs/*/apps/*/*/values.yaml; do
+            echo "== $values"
+            helm lint charts/service --strict --values "$values"
+            helm template check charts/service --values "$values" \
+              | docker run --rm -i "$KUBECONFORM" -strict -summary -kubernetes-version "$KUBERNETES_VERSION" -
+          done
+      - name: Validate the plain manifests
+        run: >
+          docker run --rm --volume "$PWD:/work" --workdir /work "$KUBECONFORM"
+          -strict -summary -kubernetes-version "$KUBERNETES_VERSION" envs/*/apps/*/postgres
