@@ -1,0 +1,18 @@
+image:
+  repository: ghcr.io/reference-platform/sample-app-api
+  tag: 0.1.0
+
+port: 8000
+
+env:
+  - name: DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: sample-app-postgres
+        key: password
+  - name: DATABASE_URL
+    value: postgresql://sample:$(DB_PASSWORD)@sample-app-postgres:5432/sample
+
+resources:
+  requests: { cpu: 50m, memory: 128Mi }
+  limits: { memory: 256Mi }

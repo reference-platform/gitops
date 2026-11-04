@@ -1,0 +1,12 @@
+image:
+  repository: ghcr.io/reference-platform/sample-app-worker
+  tag: 0.1.0
+
+service:
+  enabled: false
+
+env:
+  - name: API_URL
+    value: http://sample-app-api:8000
+  - name: INTERVAL
+    value: 30s
