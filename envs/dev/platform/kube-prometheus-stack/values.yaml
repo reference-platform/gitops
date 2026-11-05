@@ -1,0 +1,70 @@
+# kind does not expose these control plane endpoints, so they are off with their rules.
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeEtcd:
+  enabled: false
+kubeProxy:
+  enabled: false
+defaultRules:
+  rules:
+    etcd: false
+    kubeControllerManager: false
+    kubeProxy: false
+    kubeSchedulerAlerting: false
+    kubeSchedulerRecording: false
+
+prometheusOperator:
+  resources:
+    requests:
+      cpu: 20m
+      memory: 64Mi
+
+prometheus:
+  prometheusSpec:
+    retention: 2d
+    retentionSize: 3GB
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          resources:
+            requests:
+              storage: 5Gi
+
+alertmanager:
+  alertmanagerSpec:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+
+kube-state-metrics:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+
+prometheus-node-exporter:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+
+grafana:
+  # TBD: admin password from a secrets manager
+  adminPassword: admin
+  defaultDashboardsEditable: false
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+  sidecar:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
