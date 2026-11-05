@@ -18,6 +18,7 @@ jobs:
     env:
       KUBECONFORM: ghcr.io/yannh/kubeconform:v0.8.0
       KUBERNETES_VERSION: 1.37.0
+      CRD_SCHEMAS: https://raw.githubusercontent.com/datreeio/CRDs-catalog/c86448cbf1a840ca62d119259864863897c8748a/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json
     steps:
       - name: Check out the code
         uses: actions/checkout@v7.0.1
@@ -37,3 +38,9 @@ jobs:
         run: >
           docker run --rm --volume "$PWD:/work" --workdir /work "$KUBECONFORM"
           -strict -summary -kubernetes-version "$KUBERNETES_VERSION" envs/*/apps/*/manifests
+      - name: Validate the platform files
+        run: >
+          docker run --rm --volume "$PWD:/work" --workdir /work "$KUBECONFORM"
+          -strict -summary -kubernetes-version "$KUBERNETES_VERSION"
+          -schema-location default -schema-location "$CRD_SCHEMAS"
+          envs/*/platform/*.yaml
