@@ -48,6 +48,8 @@ The `platform` and `apps` projects separate infra from workloads. See
 
 On every pull request and push to `main`, GitHub Actions runs `helm lint` and
 `helm template` for every service values file, and validates the result and the
-plain manifests with [kubeconform](https://github.com/yannh/kubeconform).
+plain manifests with [kubeconform](https://github.com/yannh/kubeconform). It
+also validates the platform files (Applications, projects, ApplicationSets)
+against the ArgoCD CRD schemas.
 
 All rights reserved. See [LICENSE](LICENSE).
