@@ -1,0 +1,9 @@
+image:
+  repository: ghcr.io/reference-platform/sample-app-api
+
+port: 8000
+
+migration:
+  enabled: true
+  image:
+    repository: ghcr.io/reference-platform/sample-app-migrate

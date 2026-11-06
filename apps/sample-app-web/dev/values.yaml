@@ -1,0 +1,5 @@
+image:
+  tag: 0.1.0
+
+env:
+  API_URL: http://sample-app-api:8000
