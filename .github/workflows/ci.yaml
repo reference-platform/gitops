@@ -45,4 +45,4 @@ jobs:
           docker run --rm --volume "$PWD:/work" --workdir /work "$KUBECONFORM"
           -strict -summary -kubernetes-version "$KUBERNETES_VERSION"
           -schema-location default -schema-location "$CRD_SCHEMAS"
-          clusters/*/*.yaml platform/*/*/application.yaml
+          platform/*/*/application.yaml platform/argocd/*/{root,projects,namespaces,appsets}.yaml

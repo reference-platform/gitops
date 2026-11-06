@@ -1,8 +1,6 @@
 /platform/ @Swif2er
-/clusters/ @Swif2er
 /apps/ @Swif2er
 
 # With teams, platform files belong to the platform team and apps to the dev teams:
 # /platform/  @reference-platform/platform
-# /clusters/  @reference-platform/platform
 # /apps/      @reference-platform/dev
