@@ -1,7 +1,0 @@
-image:
-  repository: ghcr.io/reference-platform/sample-app-web
-  tag: 0.1.0
-
-env:
-  - name: API_URL
-    value: http://sample-app-api:8000

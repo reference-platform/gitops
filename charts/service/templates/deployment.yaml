@@ -26,7 +26,7 @@ spec:
               containerPort: {{ .Values.port }}
           {{- with .Values.env }}
           env:
-            {{- toYaml . | nindent 12 }}
+            {{- include "service.env" . | trim | nindent 12 }}
           {{- end }}
           readinessProbe:
             httpGet:

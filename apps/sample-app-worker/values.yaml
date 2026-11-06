@@ -1,0 +1,5 @@
+image:
+  repository: ghcr.io/reference-platform/sample-app-worker
+
+service:
+  enabled: false

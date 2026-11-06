@@ -58,7 +58,6 @@ prometheus-node-exporter:
 grafana:
   # TBD: admin password from a secrets manager
   adminPassword: admin
-  defaultDashboardsEditable: false
   resources:
     requests:
       cpu: 50m

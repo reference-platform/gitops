@@ -1,0 +1,26 @@
+image:
+  tag: 0.1.0
+
+env:
+  DATABASE_PASSWORD:
+    valueFrom:
+      secretKeyRef:
+        name: sample-app-postgres
+        key: password
+  DATABASE_URL: postgresql://sample:$(DATABASE_PASSWORD)@sample-app-postgres:5432/sample
+
+resources:
+  requests: { cpu: 50m, memory: 128Mi }
+  limits: { memory: 256Mi }
+
+migration:
+  image:
+    tag: 0.1.0
+  env:
+    DATABASE_PASSWORD:
+      valueFrom:
+        secretKeyRef:
+          name: sample-app-postgres
+          key: password
+    DATABASE_URL: postgres://sample:$(DATABASE_PASSWORD)@sample-app-postgres:5432/sample?sslmode=disable
+    DBMATE_WAIT_TIMEOUT: 5m

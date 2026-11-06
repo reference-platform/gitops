@@ -4,7 +4,11 @@ image:
 
 replicas: 1
 port: 8080
-env: []
+
+# Environment variables by name. A value is a string, or a map with the
+# fields of a container env entry, such as valueFrom. Names are sorted, so a
+# variable that uses $(NAME) must sort after the variable it refers to.
+env: {}
 
 service:
   enabled: true
@@ -18,3 +22,13 @@ resources:
   limits: { memory: 64Mi }
 
 maxUnavailable: 1
+
+migration:
+  enabled: false
+  image:
+    repository: ""
+    tag: ""
+  env: {}
+  resources:
+    requests: { cpu: 50m, memory: 32Mi }
+    limits: { memory: 64Mi }
