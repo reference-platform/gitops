@@ -28,19 +28,21 @@ jobs:
           version: v4.3.1
       - name: Lint and render the charts
         run: |
-          for values in envs/*/apps/*/*/values.yaml; do
+          for values in apps/*/*/values.yaml; do
+            service=$(dirname "$(dirname "$values")")
             echo "== $values"
-            helm lint charts/service --strict --values "$values"
-            helm template check charts/service --values "$values" \
+            helm lint charts/service --strict --values "$service/values.yaml" --values "$values"
+            helm template check charts/service --values "$service/values.yaml" --values "$values" \
               | docker run --rm -i "$KUBECONFORM" -strict -summary -kubernetes-version "$KUBERNETES_VERSION" -
           done
       - name: Validate the plain manifests
         run: >
           docker run --rm --volume "$PWD:/work" --workdir /work "$KUBECONFORM"
-          -strict -summary -kubernetes-version "$KUBERNETES_VERSION" envs/*/apps/*/manifests
+          -strict -summary -kubernetes-version "$KUBERNETES_VERSION"
+          apps/*/manifests platform/*/manifests
       - name: Validate the platform files
         run: >
           docker run --rm --volume "$PWD:/work" --workdir /work "$KUBECONFORM"
           -strict -summary -kubernetes-version "$KUBERNETES_VERSION"
           -schema-location default -schema-location "$CRD_SCHEMAS"
-          envs/*/platform/*.yaml
+          clusters/*/*.yaml platform/*/*/application.yaml
