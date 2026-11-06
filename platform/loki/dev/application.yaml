@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: dev-loki
+  namespace: argocd
+spec:
+  project: platform
+  sources:
+    - repoURL: https://grafana-community.github.io/helm-charts
+      chart: loki
+      targetRevision: 21.0.0
+      helm:
+        releaseName: loki
+        ignoreMissingValueFiles: true
+        valueFiles:
+          - $values/platform/loki/values.yaml
+          - $values/platform/loki/dev/values.yaml
+    - repoURL: https://github.com/reference-platform/gitops.git
+      targetRevision: main
+      ref: values
+    - repoURL: https://github.com/reference-platform/gitops.git
+      targetRevision: main
+      path: platform/loki/manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
